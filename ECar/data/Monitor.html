@@ -1,0 +1,314 @@
+ <html>
+  <head>
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'/>
+    <title>Monitor</title>
+    <link href="css" rel="stylesheet">
+   
+  </head>
+  
+<body>
+  <a href="/">Home</a> |
+<h3>
+	<table>
+	<tr><th colspan = 7>PWM </th> </tr>
+   
+    <td>
+    <button type="button" onClick="PWM_off()">PWM_ON</button></td>
+    <td>
+      <button type="button" onClick="PWM_on()">PWM_OFF</button></td> 
+    <tr>
+    <td>
+      <button type="button" onClick="motor_on()">FORWARD</button></td>
+    <td>
+      <button type="button" onClick="motor_off()">BACK</button></td>
+    </tr>
+    <tr>
+    <td>
+      <button type="button" onClick="motor_D()">MOTOR D</button></td>
+    <td>
+      <button type="button" onClick="motor_E()">MOTOR E</button></td>
+    </tr>
+    <tr>
+    <td>
+      <button type="button" onClick="PWM_25()">PWM_25%</button></td>
+    <td>
+      <button type="button" onClick="PWM_50()">PWM_50%</button></td>
+    </tr>
+      <tr>
+    <td>
+      <button type="button" onClick="PWM_75()">PWM_75%</button></td> 
+    <td>
+    </tr>
+    <tr>
+      <td>
+      <!-- <input type="range" min="1" max="100" value="50" class="slider" id="myRange" onchange="updateValue(this.value)"/></td> -->
+      <td>
+        <label for = "myRange" >Value:  </label>
+      </td>
+    </tr>
+    
+	</table>
+   
+<table>
+<tr><th></th><th>Temperatura</th><th>Umidade</th><th>Hora</th></tr>
+<tr><td>Motor </td><td><h2 id ='temperature'></h2></td> <td><h2 id ='hora'></h2></td><td><h2 id ='hora'></h2></td></tr>
+<tr><td>Cambio</td><td><h2 id ='temperature'></h2></td> <td><h2 id ='timeStamp'></h2></td> <td><h2 id ='pwm'></h2></td></tr>
+<tr><td> <button type=button onClick=refreshTemperature()>LER</button></td></tr>
+</table>
+ 
+</body>
+
+  
+<script type='text/javascript'>
+  
+
+  setInterval(refresh, 1000);
+  function refresh()
+  {
+    refreshTemperature();
+    //refreshHumidity();
+    //refreshStatusPin();
+    //startTime();
+  }
+
+
+function pwm_range(){
+      
+     var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+
+        var myObj = JSON.parse(this.responseText);	
+        document.getElementById('myRange').innerHTML= myObj.pwm_value + '';
+        var output = document.getElementById("demo").innerHTML = slider.value;
+       
+      };
+      xmlhttp.open('GET', "/handlePWM", true);
+      xmlhttp.send();
+
+    }
+  }
+
+    function pwm_music()
+    {
+     // counter ++;
+      
+     var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+
+        var myObj = JSON.parse(this.responseText);	
+        document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+      
+      }
+      };
+      xmlhttp.open('GET', "/pwm_music", true);
+      xmlhttp.send();
+      }
+
+    
+    function PWM_on()
+    {
+     // counter ++;
+      
+     var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+
+        var myObj = JSON.parse(this.responseText);	
+        document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+      
+      }
+      };
+      xmlhttp.open('GET', "/pwm_on", true);
+      xmlhttp.send();
+      }
+
+      
+  function PWM_off()
+    {
+     // counter ++;
+      
+     var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+
+        var myObj = JSON.parse(this.responseText);	
+        document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+      
+      }
+      };
+      xmlhttp.open('GET', "/pwm_off", true);
+      xmlhttp.send();
+      }
+
+  function motor_on()
+      {
+       // counter ++;
+        
+       var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+  
+          var myObj = JSON.parse(this.responseText);	
+          document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+        
+        }
+        };
+        xmlhttp.open('GET', "/motor_on", true);
+        xmlhttp.send();
+        }
+        
+    function motor_off()
+          {
+           // counter ++;
+            
+           var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+              if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+      
+              var myObj = JSON.parse(this.responseText);	
+              document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+            
+            }
+            };
+            xmlhttp.open('GET', "/motor_off", true);
+            xmlhttp.send();
+            }
+            
+    function motor_E()
+          {
+           // counter ++;
+            
+           var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+              if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+      
+              var myObj = JSON.parse(this.responseText);	
+              document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+            
+            }
+            };
+            xmlhttp.open('GET', "/motor_E", true);
+            xmlhttp.send();
+            }
+
+            
+    function motor_D()
+          {
+           // counter ++;
+            
+           var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+              if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+      
+              var myObj = JSON.parse(this.responseText);	
+              document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+            
+            }
+            };
+            xmlhttp.open('GET', "/motor_D", true);
+            xmlhttp.send();
+            }
+
+
+    function PWM_25()
+        {
+         // counter ++;
+          
+         var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+    
+            var myObj = JSON.parse(this.responseText);	
+            document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+          
+          }
+          };
+          xmlhttp.open('GET', "/pwm_25", true);
+          xmlhttp.send();
+          }
+  
+  
+    function PWM_50()
+        {
+         // counter ++;
+          
+         var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+    
+            var myObj = JSON.parse(this.responseText);	
+            document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+          
+          }
+          };
+          xmlhttp.open('GET', "/pwm_50", true);
+          xmlhttp.send();
+          }
+    function PWM_75()
+        {
+         // counter ++;
+          
+         var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+    
+            var myObj = JSON.parse(this.responseText);	
+            document.getElementById('pwm').innerHTML= myObj.pwm_value + '';
+          
+          }
+          };
+          xmlhttp.open('GET', "/pwm_75", true);
+          xmlhttp.send();
+          }
+
+  
+      
+  function refreshTemperature()
+    {
+     // counter ++;
+      
+     var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+
+        var myObj = JSON.parse(this.responseText);	
+        document.getElementById('temperature').innerHTML= myObj.temperature + 'V';
+      
+      }
+      };
+      xmlhttp.open('GET', "/temperature", true);
+      xmlhttp.send();
+      }
+      
+  function refreshHumidity()
+        {
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+              document.getElementById('hora').innerHTML = 'Humidity: ' + JSON.parse(xmlhttp.responseText).hora + '%';
+             
+            }
+        };
+          xmlhttp.open('GET', '/log_view', true);
+          xmlhttp.send();
+        }
+ 
+      
+  function refreshStatusPin()
+        {
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == XMLHttpRequest.DONE && xmlhttp.status == 200){
+             document.getElementById('sensor').innerHTML = 'Sensor: ' + JSON.parse(xmlhttp.responseText).Tempo.temp + 'ON' ;
+            }
+          };
+          xmlhttp.open('GET', '/jsonTemp', true);
+          xmlhttp.send();
+        }
+       
+    </script>
+
+
+  </html>
