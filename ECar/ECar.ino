@@ -31,16 +31,17 @@ WebServer server(80);
 
 // Replace with your network credentials
 const char* ssid     = "CDB-2.4G";
-const char* password = "xxxxxxxxxxx";
+const char* password = "abcde12345";
          
 //Mapeamento de pinos do NodeMCU
 #define motor_1   21
 #define motor_2   23
 #define motor_3   22
-#define ledPwm 25
- 
-float sensorPin = 33;
+#define led_in 2
 
+float sensorPin = 33;
+const int Pwm = 25;
+int pwmValue;
 int sensorValue = 0;  
 int valueD0 = HIGH;
  
@@ -99,49 +100,83 @@ File file = SPIFFS.open(F("/data.txt"), "a");
 }
 
 
+void pwm_on()
+{
+pwmValue = 1024;
+int i;
+   // ledcWrite(0, i);//Escrevemos no canal 0, o duty cycle "i".
+   delay(1000);
+   ledcWrite(led_in, pwmValue);
+   ledcWrite(Pwm, pwmValue);
+   pwmValue == i;
+  
+   //delay(3000);
+  // ledcWrite(0, 0);
+  String json = "{\"pwm_value\":"+String(pwmValue)+"}";
+  server.send (200, "application/json", json);
+   
+Serial.print("pwm = ");
+Serial.println(pwmValue);
+Serial.println(i);
+}
 
 void pwm_off()
 {
-int pwm_value;
+pwmValue = 0 ;
 int i;
 
-  //ledcWrite(0, 0);
-  ledcWrite(0, 1024);
+ledcWrite(led_in, pwmValue);
+ledcWrite(Pwm, pwmValue);
   delay(10);  
 
-   String json = "{\"pwm_value\":"+String(i)+"}";
+   String json = "{\"pwm_value\":"+String(pwmValue)+"}";
   server.send (200, "application/json", json);
+
+  Serial.print("pwm = ");
+  Serial.println(pwmValue);
 
 }
 
 void pwm_25()
 {
-int pwm_value;
+pwmValue = 256;
 int i;
-  ledcWrite(0, 750);
+ledcWrite(led_in, pwmValue);
+ledcWrite(Pwm, pwmValue);
   delay(10);  
-   String json = "{\"pwm_value\":"+String(i)+"}";
+   String json = "{\"pwm_value\":"+String(pwmValue)+"}";
   server.send (200, "application/json", json);
+  
+  Serial.print("pwm = ");
+  Serial.println(pwmValue);
 }
 
 void pwm_50()
 {
-int pwm_value;
+pwmValue= 512;
 int i;
-  ledcWrite(0, 512);
+ledcWrite(led_in, pwmValue);
+ledcWrite(Pwm, pwmValue);
   delay(10);  
-   String json = "{\"pwm_value\":"+String(i)+"}";
+   String json = "{\"pwm_value\":"+String(pwmValue)+"}";
   server.send (200, "application/json", json);
+  
+  Serial.print("pwm = ");
+  Serial.println(pwmValue);
 }
 
 void pwm_75()
 {
-int pwm_value;
+pwmValue = 756;
 int i;
- ledcWrite(0, 256);
+ledcWrite(led_in, pwmValue);
+ledcWrite(Pwm, pwmValue);
   delay(10);  
-   String json = "{\"pwm_value\":"+String(i)+"}";
+   String json = "{\"pwm_value\":"+String(pwmValue)+"}";
   server.send (200, "application/json", json);
+  
+  Serial.print("pwm = ");
+  Serial.println(pwmValue);
 }
 
 void motor_off()
@@ -149,65 +184,65 @@ void motor_off()
   digitalWrite(motor_1, LOW);
    delay(1000);  
    
-  String json = "{\"pwm_value\":"+String(motor_1)+"}";
+  String json = "{\"motor\":\"Desligado\"}";
   server.send (200, "application/json", json);
-  Serial.println(motor_1);
+  Serial.println("Motor Desligado");
 }
 
 void motor_on()
 {   
-  pinMode(motor_1, OUTPUT);
   digitalWrite(motor_1, HIGH);
-   delay(1000);  
+  delay(1000);  
    
-   String json = "{\"pwm_value\":"+String(motor_1)+"}";
+   String json = "{\"motor\":\"Ligado\"}";
   server.send (200, "application/json", json);
-  Serial.println(motor_1);
+  Serial.println("Motor Ligado");
 }
 
 void motor_D()
 {   
-  pinMode(motor_2, OUTPUT);
-  pinMode(motor_3, OUTPUT);
-  digitalWrite(motor_3, HIGH);
   digitalWrite(motor_2, LOW);
-   delay(1000);  
+  digitalWrite(motor_3, HIGH);
+  delay(1000);  
    
-   String json = "{\"pwm_value\":"+String(motor_2)+"}";
+   String json = "{\"direction\":\"Right\"}";
   server.send (200, "application/json", json);
-  Serial.println(motor_2);
+  Serial.println("Right");
 }
 
 void motor_E()
 {   
-  pinMode(motor_2, OUTPUT);
-  pinMode(motor_3, OUTPUT);
   digitalWrite(motor_2, HIGH);
-   digitalWrite(motor_3, LOW);
-   delay(1000);  
+  digitalWrite(motor_3, LOW);
+  delay(1000);  
    
- String json = "{\"pwm_value\":"+String(motor_2)+"}";
+ String json = "{\"direction\":\"Left\"}";
   server.send (200, "application/json", json);
-  Serial.println(motor_3);
+  Serial.println("Left");
 }
-void pwm_on()
-{
-int pwm_value;
-int i;
-   // ledcWrite(0, i);//Escrevemos no canal 0, o duty cycle "i".
-   delay(1000);
-   ledcWrite(0, 0);
-   pwm_value == i;
-  
-   //delay(3000);
-  // ledcWrite(0, 0);
-  String json = "{\"pwm_value\":"+String(i)+"}";
-  server.send (200, "application/json", json);
+
+void forward()
+{   
+  digitalWrite(motor_2, HIGH);
+  digitalWrite(motor_3, HIGH);
+  delay(1000);  
    
-Serial.print("pwm = ");
-Serial.println(pwm_value);
-Serial.println(i);
+   String json = "{\"direction\":\"Forward\"}";
+  server.send (200, "application/json", json);
+  Serial.println("Forward");
 }
+
+void reverse()
+{   
+  digitalWrite(motor_2, HIGH);
+  digitalWrite(motor_3, LOW);
+  delay(1000);  
+   
+   String json = "{\"direction\":\"Reverse\"}";
+  server.send (200, "application/json", json);
+  Serial.println("Reverse");
+}
+
 
 
 void getTemperature()
@@ -215,9 +250,6 @@ void getTemperature()
   int valor = analogRead(sensorPin);
   t = ((valor*250)/1023);
  
-  String json = "{\"temperature\":"+String(t)+"}";
-  server.send (200, "application/json", json);
-
    //fator = 0.39;
   sensorValue = analogRead(sensorPin);
   float temp1 = 0;
@@ -236,12 +268,19 @@ void getTemperature()
     
     delay(2); 
 
- //  String json2 = "{\"temperature\":"+String(temp2)+"}";
+ // String json2 = "{\"temperature\":"+String(temp2)+"}";
  // server.send (200, "application/json", jso2n);
-  
+ String json = "{\"temperature\":" +String(valor)+"}";
+ server.send (200, "application/json", json);
+
+ 
 Serial.print("sensor = ");
 Serial.println(t);
+Serial.print("temp1 = ");
+Serial.println( temp1);
+Serial.print("temp2 = ");
 Serial.println( temp2);
+Serial.print("Amp = ");
 Serial.println( Amp);
 delay(100);
 
@@ -350,12 +389,12 @@ void setup_wifi()
    
    // WiFi.mode(WIFI_AP);
    
-   WiFi.setHostname("CDB_ESP1");
+   WiFi.setHostname("ECAR");
    // WiFi.softAP(deviceID().c_str(), deviceID().c_str());
    //WiFi.softAP(ap_ssid,ap_pass);
    //IP 192.168.4.1
 
-   WiFi.softAP("CDB_ESP1","12345678");
+   WiFi.softAP("ECAR","12345678");
     IPAddress myIP = WiFi.softAPIP();
     log("WiFi AP " + deviceID() + " - IP " + ipStr(WiFi.softAPIP()));
  
@@ -369,6 +408,8 @@ void setup_wifi()
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
+  
+  Serial.print("MAC: ");
    Serial.println(WiFi.macAddress());
   Serial.println("");
   }
@@ -384,12 +425,15 @@ void setup ()
     log(F("SPIFFS ERRO"));
     while (true);
   }
-  ledcAttachPin(25, 0);
-  ledcAttachPin(2, 0);//Atribuimos o pino 2 ao canal 0.
-  ledcSetup(0, 1000, 10);//Atribuimos ao canal 0 a frequencia de 1000Hz com resolucao de 10bits.
+ledcAttachPin(Pwm, 0);//Atribuimos o pino 25 ao canal 0.
+ledcAttachPin(led_in, 0);//Atribuimos o pino 2 ao canal 0.
+
+ledcSetup(Pwm, 1000, 10);//Atribuimos ao canal 0 a frequencia de 1000Hz com resolucao de 10bits.
+ledcSetup(led_in, 1000, 10);//Atribuimos ao canal 0 a frequencia de 1000Hz com resolucao de 10bits.
+
 pinMode(sensorPin, INPUT);
-pinMode(2, OUTPUT);//Definimos o pino 2 (LED) como saída.
-pinMode(25, OUTPUT);//Definimos o pino 2 (LED) como saída.
+pinMode(led_in, OUTPUT);//Definimos o pino 2 (LED) como saída.
+pinMode(Pwm, OUTPUT);//Definimos o pino 25 (PWM) como saída.
 
 pinMode(motor_1, OUTPUT);
 pinMode(motor_2, OUTPUT);
@@ -406,9 +450,11 @@ server.on("/pwm_50",HTTP_GET, pwm_50);
 server.on("/pwm_75",HTTP_GET, pwm_75);
 server.on("/pwm_off",HTTP_GET, pwm_off);
 server.on("/motor_on",HTTP_GET, motor_on);
+server.on("/motor_off",HTTP_GET, motor_off);
 server.on("/motor_D",HTTP_GET, motor_D);
 server.on("/motor_E",HTTP_GET, motor_E);
-server.on("/motor_off",HTTP_GET, motor_off);
+server.on("/forward",HTTP_GET, forward);
+server.on("/reverse",HTTP_GET, reverse);
 server.on("/Monitor",HTTP_GET,handlePWM);
 server.on("/css" , handleCSS);
 server.onNotFound(onNotFound);
